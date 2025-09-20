@@ -2,41 +2,11 @@
 
 Aureon
 
-© 2024 Aureon 
+© 2025 Aureon 
 All Rights Reserved.
 
 --]]
 
-
---[[
-
-Aureon Pre-Hyperion Todo List
-
-High Priority
- - Invisible, Godmode
- - All Scripts buttons and Universal scripts
- - Chat Spam Detection
- - Custom Script Prompts
- - Player Kill, Spectate and ESP via Playerlist
- - http.request support for Aureon Intelligent HTTP Interception
- - Performance Improvements to Roblox itself
- 
-Moderate Priority
- - Spectate Animation, like GTA serverhop, tween to high in the sky, then tween to other player's head
- - Chat Spy Tracking: Follows who they're whispering to based on original message
- - Starlight 
- - Chatlogs
- - GTA Serverhop
- - Anti-Spam (chat) formula, based on text length, caps, emojis etc.
- - Reduce any form of detection of Aureon
- - Automated lowering of graphics on lower FPS, ensure no false positives
- 
-Potential Future Setting Options
- - Block entire domain or just the specific page in the Aureon Intelligent Flow Interception. Do this on case by case, e.g blocked = {"link.com", true} - true being whether its the domain or not
- - Serverhop type (default/gta)
- - Hook Specific Functions to reduce the need for external scripts
- 
---]]
 
 -- Ensure the game is loaded 
 if not game:IsLoaded() then
@@ -95,8 +65,8 @@ local siriusValues = {
 	siriusFolder = "Aureon",
 	settingsFile = "settings.srs",
 	interfaceAsset = 14183548964,
-	cdn = "https://cdn.aureon.menu/AUREON-SCRIPT-CORE-ASSETS/", -- Alterado de Aureon para Aureon
-	icons = "https://cdn.aureon.menu/AUREON-SCRIPT-CORE-ASSETS/Icons/", -- Alterado de Aureon para Aureon
+	cdn = "https://cdn.sirius.menu/SIRIUS-SCRIPT-CORE-ASSETS/",
+	icons = "https://cdn.sirius.menu/SIRIUS-SCRIPT-CORE-ASSETS/Icons/",
 	enableExperienceSync = false, -- Games are no longer available due to a lack of whitelisting, they may be made open source at a later date, however they are patched as of now and are useless to the end user. Turning this on may introduce "fake functionality".
 	games = {
 		BreakingPoint = {
@@ -141,8 +111,8 @@ local siriusValues = {
 		},
 	},
 	rawTree = "https://raw.githubusercontent.com/SiriusSoftwareLtd/Sirius/Sirius/games/",
-	neonModule = "https://raw.githubusercontent.com/shlexware/Sirius/request/library/neon.lua",
-	senseRaw = "https://raw.githubusercontent.com/shlexware/Sirius/request/library/sense/source.lua",
+	neonModule = "https://raw.githubusercontent.com/shlexware/Aureon/request/library/neon.lua",
+	senseRaw = "https://raw.githubusercontent.com/shlexware/Aureon/request/library/sense/source.lua",
 	executors = {"synapse x", "script-ware", "krnl", "scriptware", "comet", "valyse", "fluxus", "electron", "hydrogen"},
 	disconnectTypes = { {"ban", {"ban", "perm"}}, {"network", {"internet connection", "network"}} },
 	nameGeneration = {
@@ -383,36 +353,8 @@ local siriusValues = {
 		},
 	}
 }
-local aureonSettings = {
-	{
-		name = 'Save Game',
-		description = 'Save various aspects of the current game session.',
-		color = Color3.new(0.9, 0.6, 0.1),
-		minimumLicense = 'Free',
-		categorySettings = {
-			{
-				name = 'Decompile Scripts',
-				description = 'Decompile and save all client-side scripts.',
-				settingType = 'Boolean',
-				current = false,
-				id = 'decompileScripts'
-			},
-			{
-				name = 'Save Place as RBXL',
-				description = 'Save the current place as a .rbxl file.',
-				settingType = 'Boolean',
-				current = false,
-				id = 'savePlaceAsRBXL'
-			},
-			{
-				name = 'RBXL File Name',
-				description = 'The name for the saved .rbxl file.',
-				settingType = 'Input',
-				current = 'Aureon_Saved_Place',
-				id = 'rbxlFileName'
-			},
-		}
-	},
+
+local siriusSettings = {
 	{
 		name = 'General',
 		description = 'The general settings for Aureon, from simple to unique features.',
@@ -727,6 +669,42 @@ local aureonSettings = {
 		},
 	},
 	{
+		name = 'Save game',
+		description = 'Salva o estado atual do jogo.',
+		color = Color3.new(0.4, 0.8, 0.4),
+		minimumLicense = 'Free',
+		categorySettings = {
+			{
+				name = 'Decompile Scripts',
+				description = 'Decompila os scripts antes de salvar.',
+				settingType = 'Boolean',
+				current = false,
+				id = 'decompile'
+			},
+			{
+				name = 'File Name',
+				description = 'Nome do arquivo .rbxl',
+				settingType = 'Input',
+				current = 'Aureon-Save.rbxl',
+			id = 'savename'
+				},
+				{
+					name = 'Save Map Only',
+					description = 'Salva apenas o mapa (sem scripts).',
+					settingType = 'Boolean',
+					current = false,
+					id = 'savemaponly'
+				},
+				{
+					name = 'Save Scripts Only',
+					description = 'Salva apenas os scripts (sem o mapa).',
+					settingType = 'Boolean',
+					current = false,
+					id = 'savescriptsonly'
+				},
+		},
+	},
+	{
 		name = 'Logging',
 		description = 'Send logs to your specified webhook URL of things like player joins and leaves and messages.',
 		color = Color3.new(0.905882, 0.780392, 0.0666667),
@@ -766,63 +744,10 @@ local aureonSettings = {
 			},
 		}
 	},
-	{
-		name = 'Save Game',
-		description = 'Save various aspects of the current game session.',
-		color = Color3.new(0.9, 0.6, 0.1),
-		minimumLicense = 'Free',
-		categorySettings = {
-			{
-				name = 'Decompile Scripts',
-				description = 'Decompile and save all client-side scripts.',
-				settingType = 'Boolean',
-				current = false,
-				id = 'decompileScripts'
-			},
-			{
-				name = 'Save Place as RBXL',
-				description = 'Save the current place as a .rbxl file.',
-				settingType = 'Boolean',
-				current = false,
-				id = 'savePlaceAsRBXL'
-			},
-			{
-				name = 'RBXL File Name',
-				description = 'The name for the saved .rbxl file.',
-				settingType = 'Input',
-				current = 'Aureon_Saved_Place',
-				id = 'rbxlFileName'
-			},
-		}
-	},
-	},
-	{
-		name = 'Save Game',
-		description = 'Save various aspects of the current game session.',
-		color = Color3.new(0.9, 0.6, 0.1),
-		minimumLicense = 'Free',
-		categorySettings = {
-			{
-				name = 'Decompile Scripts',
-				description = 'Decompile and save all client-side scripts.',
-				settingType = 'Boolean',
-				current = false,
-				id = 'decompileScripts'
-			},
-			{
-				name = 'Save Place as RBXL',
-				description = 'Save the current place as a .rbxl file.',
-				settingType = 'Boolean',
-				current = false,
-				id = 'savePlaceAsRBXL'
-			},
-			{
-				name = 'RBXL File Name',
-				description = 'The name for the saved .rbxl file.',
-				settingType = 'Input',
-				current = 'Aureon_Saved_Place',}
+}
 
--- Generate random usernamel randomAdjective = siriusValues.nameGeneration.adjectives[math.random(1, #siriusValues.nameGeneration.adjectives)]
+-- Generate random username
+local randomAdjective = siriusValues.nameGeneration.adjectives[math.random(1, #siriusValues.nameGeneration.adjectives)]
 local randomNoun = siriusValues.nameGeneration.nouns[math.random(1, #siriusValues.nameGeneration.nouns)]
 local randomNumber = math.random(100, 3999) -- You can customize the range
 local randomUsername = randomAdjective .. randomNoun .. randomNumber
@@ -1821,7 +1746,7 @@ local function sortActions()
 			end)
 
 			if not success then
-				queueNotification("Action Error", "This action ('"..(action.name).."') had an error while running, please report this to the Aureon team at discord.gg/Ej2bHkjFY9", 4370336704)
+				queueNotification("Action Error", "This action ('"..(action.name).."') had an error while running, please report this to the Aureon team at https://discord.gg/Ej2bHkjFY9", 4370336704)
 				action.enabled = false
 				newAction.Icon.Image = "rbxassetid://"..action.images[2]
 				tweenService:Create(newAction, TweenInfo.new(0.4, Enum.EasingStyle.Exponential), {BackgroundTransparency = 0.55}):Play()
@@ -3353,64 +3278,25 @@ local function removePlayer(player)
 end
 
 local function openSettings()
-	debounce = true
-
-	settingsPanel.BackgroundTransparency = 1
-	settingsPanel.Title.TextTransparency = 1
-	settingsPanel.Subtitle.TextTransparency = 1
-	settingsPanel.Back.ImageTransparency = 1
-	settingsPanel.Shadow.ImageTransparency = 1
-
-	wipeTransparency(settingsPanel.SettingTypes, 1, true)
-
 	settingsPanel.Visible = true
-	settingsPanel.UIGradient.Enabled = true
-	settingsPanel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-	settingsPanel.UIGradient.Color = ColorSequence.new({ColorSequenceKeypoint.new(0, Color3.new(0.0470588, 0.0470588, 0.0470588)),ColorSequenceKeypoint.new(1, Color3.new(0.0470588, 0.0470588, 0.0470588))})
-	settingsPanel.UIGradient.Offset = Vector2.new(0, 1.7)
+	settingsPanel.BackgroundTransparency = 0
+	settingsPanel.Title.TextTransparency = 0
+	settingsPanel.Subtitle.TextTransparency = 0
+	settingsPanel.Back.ImageTransparency = 0
+	settingsPanel.Buttons.SaveGame.Visible = true
+	settingsPanel.Shadow.ImageTransparency = 0.7
 	settingsPanel.SettingTypes.Visible = true
 	settingsPanel.SettingLists.Visible = false
-	settingsPanel.Size = UDim2.new(0, 550, 0, 340)
-	settingsPanel.Title.Position = UDim2.new(0.045, 0, 0.057, 0)
-
-	settingsPanel.Title.Text = "Settings"
-	settingsPanel.Subtitle.Text = "Adjust your preferences, set new keybinds, test out new features and more."
-
-	tweenService:Create(settingsPanel, TweenInfo.new(0.5, Enum.EasingStyle.Quint), {Size = UDim2.new(0, 613, 0, 384)}):Play()
-	tweenService:Create(settingsPanel, TweenInfo.new(0.5, Enum.EasingStyle.Quint), {BackgroundTransparency = 0}):Play()
-	tweenService:Create(settingsPanel.Shadow, TweenInfo.new(0.5, Enum.EasingStyle.Quint), {ImageTransparency = 0.7}):Play()
-	tweenService:Create(settingsPanel.Title, TweenInfo.new(0.5, Enum.EasingStyle.Quint), {TextTransparency = 0}):Play()
-	tweenService:Create(settingsPanel.Subtitle, TweenInfo.new(0.5, Enum.EasingStyle.Quint), {TextTransparency = 0}):Play()
-
-	task.wait(0.1)
 
 	for _, settingType in ipairs(settingsPanel.SettingTypes:GetChildren()) do
 		if settingType.ClassName == "Frame" then
-			local gradientRotation = math.random(78, 95)
-
-			tweenService:Create(settingType.UIGradient, TweenInfo.new(0.5, Enum.EasingStyle.Quint), {Rotation = gradientRotation}):Play()
-			tweenService:Create(settingType.Shadow.UIGradient, TweenInfo.new(0.5, Enum.EasingStyle.Quint), {Rotation = gradientRotation}):Play()
-			tweenService:Create(settingType.UIStroke.UIGradient, TweenInfo.new(0.5, Enum.EasingStyle.Quint), {Rotation = gradientRotation}):Play()
-			tweenService:Create(settingType, TweenInfo.new(0.5, Enum.EasingStyle.Quint), {BackgroundTransparency = 0}):Play()
-			tweenService:Create(settingType.Shadow, TweenInfo.new(0.5, Enum.EasingStyle.Quint), {ImageTransparency = 0.7}):Play()
-			tweenService:Create(settingType.UIStroke, TweenInfo.new(0.5, Enum.EasingStyle.Quint), {Transparency = 0}):Play()
-			tweenService:Create(settingType.Title, TweenInfo.new(0.5, Enum.EasingStyle.Quint), {TextTransparency = 0.2}):Play()
-
-			task.wait(0.02)
+			settingType.Visible = true
+			settingType.BackgroundTransparency = 0
+			settingType.Shadow.ImageTransparency = 0.7
+			settingType.UIStroke.Transparency = 0
+			settingType.Title.TextTransparency = 0
 		end
 	end
-
-	for _, settingList in ipairs(settingsPanel.SettingLists:GetChildren()) do
-		if settingList.ClassName == "ScrollingFrame" then
-			for _, setting in ipairs(settingList:GetChildren()) do
-				if setting.ClassName == "Frame" then
-					setting.Visible = true
-				end
-			end
-		end
-	end
-
-	debounce = false
 end
 
 local function closeSettings()
@@ -3497,6 +3383,10 @@ local function assembleSettings()
 		newCategory.UIGradient.Color = ColorSequence.new({ColorSequenceKeypoint.new(0, Color3.new(0.0392157, 0.0392157, 0.0392157)),ColorSequenceKeypoint.new(1, category.color)})
 
 		newCategory.Visible = true
+		newCategory.BackgroundTransparency = 0
+		newCategory.Shadow.ImageTransparency = 0.7
+		newCategory.UIStroke.Transparency = 0
+		newCategory.Title.TextTransparency = 0
 
 		local hue, sat, val = Color3.toHSV(category.color)
 
@@ -3530,7 +3420,7 @@ local function assembleSettings()
 				settingsPanel.UIGradient.Color = ColorSequence.new({ColorSequenceKeypoint.new(0, Color3.new(0.0470588, 0.0470588, 0.0470588)),ColorSequenceKeypoint.new(1, category.color)})
 				settingsPanel.SettingTypes.Visible = false
 				settingsPanel.SettingLists.Visible = true
-				settingsPanel.SettingLists.UIPageLayout:JumpTo(settingsPanel.SettingLists[category.name])
+				settingsPanel.SettingLists.UIPageLayout:JumpTo(newList)
 				settingsPanel.Subtitle.Text = category.description
 				settingsPanel.Back.Visible = true
 				settingsPanel.Title.Text = category.name
@@ -3595,7 +3485,7 @@ local function assembleSettings()
 					newSwitch.Interact.MouseButton1Click:Connect(function()
 						if minimumLicense then
 							if (minimumLicense == "Pro" and not Pro) or (minimumLicense == "Essential" and not (Pro or Essential)) then
-								queueNotification("This feature is locked", "You must be "..minimumLicense.." or higher to use "..setting.name..". \n\nUpgrade at https://sirius.menu.", 4483345875)
+								queueNotification("This feature is locked", "You must be "..minimumLicense.." or higher to use "..setting.name..". \n\nUpgrade at https://discord.gg/Ej2bHkjFY9.", 4483345875)
 								return
 							end
 						end
@@ -3646,7 +3536,7 @@ local function assembleSettings()
 					newInput.InputFrame.InputBox.FocusLost:Connect(function()
 						if minimumLicense then
 							if (minimumLicense == "Pro" and not Pro) or (minimumLicense == "Essential" and not (Pro or Essential)) then
-								queueNotification("This feature is locked", "You must be "..minimumLicense.." or higher to use "..setting.name..". \n\nUpgrade at https://sirius.menu.", 4483345875)
+								queueNotification("This feature is locked", "You must be "..minimumLicense.." or higher to use "..setting.name..". \n\nUpgrade at https://discord.gg/Ej2bHkjFY9.", 4483345875)
 								newInput.InputFrame.InputBox.Text = setting.current
 								return
 							end
@@ -3691,7 +3581,7 @@ local function assembleSettings()
 
 						if minimumLicense then
 							if (minimumLicense == "Pro" and not Pro) or (minimumLicense == "Essential" and not (Pro or Essential)) then
-								queueNotification("This feature is locked", "You must be "..minimumLicense.." or higher to use "..setting.name..". \n\nUpgrade at https://sirius.menu.", 4483345875)
+								queueNotification("This feature is locked", "You must be "..minimumLicense.." or higher to use "..setting.name..". \n\nUpgrade at https://discord.gg/Ej2bHkjFY9.", 4483345875)
 								newInput.InputFrame.InputBox.Text = setting.current
 								return
 							end
@@ -3750,7 +3640,7 @@ local function assembleSettings()
 
 						if minimumLicense then
 							if (minimumLicense == "Pro" and not Pro) or (minimumLicense == "Essential" and not (Pro or Essential)) then
-								queueNotification("This feature is locked", "You must be "..minimumLicense.." or higher to use "..setting.name..". \n\nUpgrade at https://sirius.menu.", 4483345875)
+								queueNotification("This feature is locked", "You must be "..minimumLicense.." or higher to use "..setting.name..". \n\nUpgrade at https://discord.gg/Ej2bHkjFY9.", 4483345875)
 								newKeybind.InputFrame.InputBox.Text = setting.current
 								return
 							end
@@ -3854,7 +3744,7 @@ end
 
 local function boost()
 	local success, result = pcall(function()
-		loadstring(game:HttpGet('https://raw.githubusercontent.com/AureonSoftwareLtd/Aureon/refs/heads/request/boost.lua'))()
+		loadstring(game:HttpGet('https://raw.githubusercontent.com/SiriusSoftwareLtd/Sirius/refs/heads/request/boost.lua'))()
 	end)
 
 	if not success then
@@ -3911,7 +3801,7 @@ local function start()
 	end
 
 	if script_key and not (Essential or Pro) then
-		queueNotification("License Error", "We've detected a key being placed above Aureon loadstring, however your key seems to be invalid. Make a support request at discord.gg/Ej2bHkjFY9 to get this solved within minutes.", "document-minus")
+	queueNotification("License Error", "We\'ve detected a key being placed above Aureon loadstring, however your key seems to be invalid. Make a support request at https://discord.gg/Ej2bHkjFY9 to get this solved within minutes.", "document-minus")
 	end
 
 	if siriusValues.enableExperienceSync then
@@ -4050,7 +3940,7 @@ end)
 
 homeContainer.Interactions.Discord.Interact.MouseButton1Click:Connect(function()
 	if setclipboard then 
-		originalSetClipboard("https://discord.gg/Ej2bHkjFY9")
+		originalSetClipboard("https://https://discord.gg/Ej2bHkjFY9")
 		queueNotification("Discord Invite Copied", "We've set your clipboard to the Aureon discord invite.", 4335479121)
 	else
 		queueNotification("Unable to copy Discord invite", "Missing setclipboard() function, can't set data to your clipboard.", 4335479658)
@@ -4705,3 +4595,55 @@ while task.wait(1) do
 		end
 	end
 end
+
+
+local function saveGame()
+    local decompileScripts = checkSetting("Decompile Scripts", "Save game").current
+    local fileName = checkSetting("File Name", "Save game").current
+    local saveMapOnly = checkSetting("Save Map Only", "Save game").current
+    local saveScriptsOnly = checkSetting("Save Scripts Only", "Save game").current
+
+    queueNotification("Save Game", "Attempting to save the game...", 4400696294)
+
+    pcall(function()
+        local success, err = pcall(function()
+            local path = "Aureon/" .. fileName
+            if not isfolder("Aureon") then makefolder("Aureon") end
+
+            if saveMapOnly then
+                local mapData = game:GetService("DataModel"):SavePlaceToXML()
+                writefile(path, mapData)
+                queueNotification("Save Game", "Map saved successfully to " .. path .. ".", 4400696294)
+            elseif saveScriptsOnly then
+                local scriptsFolder = path:gsub("%.rbxl$", "_scripts")
+                if not isfolder(scriptsFolder) then makefolder(scriptsFolder) end
+                
+                local scriptCount = 0
+                for _, script in ipairs(game:GetDescendants()) do
+                    if script:IsA("LuaSourceContainer") and script.Source ~= "" then
+                        local scriptPath = scriptsFolder .. "/" .. script:GetFullName():gsub("%.", "_") .. ".lua"
+                        writefile(scriptPath, script.Source)
+                        scriptCount = scriptCount + 1
+                    end
+                end
+                queueNotification("Save Game", "Saved " .. scriptCount .. " scripts to " .. scriptsFolder .. ".", 4400696294)
+
+            elseif decompileScripts then
+                -- Placeholder for decompiler logic
+                queueNotification("Save Game", "Decompiling scripts (not yet implemented).", 4400696294)
+                -- For now, we\'ll just save the place directly if decompile is selected without other specific options
+                writefile(path, game:GetService("DataModel"):SavePlaceToXML())
+                queueNotification("Save Game", "Game saved (with decompile option, but decompiler not implemented) to " .. path .. ".", 4400696294)
+            else
+                writefile(path, game:GetService("DataModel"):SavePlaceToXML())
+                queueNotification("Save Game", "Game saved successfully to " .. path .. ".", 4400696294)
+            end
+        end)
+
+        if not success then
+            queueNotification("Save Game Error", "Failed to save game: " .. tostring(err), 4370336704)
+        end
+    end)
+end
+
+
